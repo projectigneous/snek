@@ -17,7 +17,7 @@ function renderCheatsMenu() {
     ctx.fillText((wallcheat ? "* " : "  ") + "Wallcheat", 30,50)
     ctx.fillText((trailcheat ? "* " : "  ") + "Trailcheat", 30,65)
     ctx.fillText((applecheat ? "* " : "  ") + "Applecheat", 30,80)
-    ctx.fillText((bot ? "* " : "  ") + "Bot [not implemented]", 30,95)
+    ctx.fillText((bot ? "* " : "  ") + "Bot", 30,95)
     ctx.fillStyle = colorPalettes[colorPalette].head
     ctx.fillText("Color Palette: " + colorPalette, 30,110)
     ctx.fillStyle = "#0f0"
