@@ -10,9 +10,7 @@ function renderCheatsMenu() {
     ctx.fillStyle = "#0f0"
     ctx.fillRect(10,10,300,300)
     ctx.clearRect(13,13,295,295)
-    ctx.fillStyle = "#00000088"
-    ctx.fillRect(13,13,295,295)
-    ctx.fillStyle = "#0f0"
+
     ctx.font = "20px monospace"
     centerText("CHEATS MENU",30)
     ctx.font = "15px monospace"
