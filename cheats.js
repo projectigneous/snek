@@ -8,21 +8,21 @@ var bot = false
 
 function renderCheatsMenu() {
     ctx.fillStyle = "#0f0"
-    ctx.fillRect(10,10,300,300)
-    ctx.clearRect(13,13,295,295)
+    ctx.fillRect(20,20,600,600)
+    ctx.clearRect(26,26,590,590)
 
-    ctx.font = "20px monospace"
-    centerText("CHEATS MENU",30)
-    ctx.font = "15px monospace"
-    ctx.fillText((wallcheat ? "* " : "  ") + "Wallcheat", 30,50)
-    ctx.fillText((trailcheat ? "* " : "  ") + "Trailcheat", 30,65)
-    ctx.fillText((applecheat ? "* " : "  ") + "Applecheat", 30,80)
-    ctx.fillText((bot ? "* " : "  ") + "Bot", 30,95)
+    ctx.font = "40px monospace"
+    centerText("CHEATS MENU",60)
+    ctx.font = "30px monospace"
+    ctx.fillText((wallcheat ? "* " : "  ") + "Wallcheat", 60,100)
+    ctx.fillText((trailcheat ? "* " : "  ") + "Trailcheat", 60,130)
+    ctx.fillText((applecheat ? "* " : "  ") + "Applecheat", 60,160)
+    ctx.fillText((bot ? "* " : "  ") + "Bot", 60,190)
     ctx.fillStyle = colorPalettes[colorPalette].head
-    ctx.fillText("Color Palette: " + colorPalette, 30,110)
+    ctx.fillText("Color Palette: " + colorPalette, 60,220)
     ctx.fillStyle = "#0f0"
-    ctx.fillText("Go back", 30,140)
-    ctx.fillText(">",17,((cheatSelected == 5 ? 6 : cheatSelected)  * 15) + 50)
+    ctx.fillText("Go back", 60,280)
+    ctx.fillText(">",34,((cheatSelected == 5 ? 6 : cheatSelected)  * 30) + 100)
 }
 
 function checkCheats(key) {
