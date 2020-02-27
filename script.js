@@ -7,13 +7,13 @@ const bWidth = width / boardWidth; const bHeight = height / boardHeight
 function resetGame() {
     gameState = {
         running: true,
-        position: [boardHeight / 2 + 2,boardHeight / 2 ],
+        position: [boardHeight / 2 - 2,boardHeight / 2 ],
         direction: [1,0],
         canDirect: true,
         canReset: true,
         trail: [],
         length: 0,
-        applePosition: [boardHeight / 2 - 2,boardHeight / 2],
+        applePosition: [boardHeight / 2 + 2,boardHeight / 2],
         movementIndex: 0
     }    
 }
@@ -108,6 +108,7 @@ function loseState() {
 function movement() {
     if (window.smovement) { window.smovement() }
     if (!gameState.running) {return}
+
     // add trail
     gameState.trail.unshift([gameState.position[0],gameState.position[1],gameState.movementIndex])
     // limit trail size
@@ -159,7 +160,6 @@ function movement() {
 
 
     gameState.canDirect = true
-
     // bot
     if (bot) {
         doBotLogic()
@@ -176,14 +176,20 @@ function render() {
         for (var trail of gameState.trail) {
             ctx.fillStyle = colorPalettes[colorPalette].trail[(gameState.movementIndex - trail[2]) % colorPalettes[colorPalette].trail.length]
             ctx.fillRect((trail[0] * bWidth) + bWidth * 0.15,(trail[1] * bHeight) + bHeight * 0.15,bWidth * 0.7,bHeight * 0.7)
-        }
-        if (bot) {
-            for (var a of botIndicators) {
-                ctx.fillStyle = a[4]
-                ctx.fillRect(...a)
+        }/*
+        ctx.globalAlpha = 0.2
+        if (typeof steps != "undefined" && bot) {
+            for (var step of steps) {
+                ctx.fillStyle = "#f00"
+                ctx.fillRect(step[0] * bWidth,step[1] * bHeight,bWidth,bHeight)
             }
         }
+        ctx.globalAlpha = 1
+        for (var indicator of botIndicators) {
+            ctx.fillStyle = indicator[4]
+            ctx.fillRect(indicator[0],indicator[1],bWidth,bHeight)
 
+        }*/
 
         // Render head
         ctx.fillStyle = colorPalettes[colorPalette].head
@@ -199,7 +205,7 @@ function render() {
     animFrame = requestAnimationFrame(render)
 }
 var animFrame = requestAnimationFrame(render)
-var mvmt = setInterval(movement,100)
+var mvmt = setInterval(movement,1000)
 
 var keylog = ""
 
