@@ -205,7 +205,7 @@ function render() {
     animFrame = requestAnimationFrame(render)
 }
 var animFrame = requestAnimationFrame(render)
-var mvmt = setInterval(movement,1000)
+var mvmt = setInterval(movement,100)
 
 var keylog = ""
 
