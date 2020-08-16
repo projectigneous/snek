@@ -176,7 +176,7 @@ function render() {
         for (var trail of gameState.trail) {
             ctx.fillStyle = colorPalettes[colorPalette].trail[(gameState.movementIndex - trail[2]) % colorPalettes[colorPalette].trail.length]
             ctx.fillRect((trail[0] * bWidth) + bWidth * 0.15,(trail[1] * bHeight) + bHeight * 0.15,bWidth * 0.7,bHeight * 0.7)
-        }/*
+        }
         ctx.globalAlpha = 0.2
         if (typeof steps != "undefined" && bot) {
             for (var step of steps) {
@@ -185,11 +185,13 @@ function render() {
             }
         }
         ctx.globalAlpha = 1
+        if (bot) {
         for (var indicator of botIndicators) {
             ctx.fillStyle = indicator[4]
             ctx.fillRect(indicator[0],indicator[1],bWidth,bHeight)
 
-        }*/
+        }
+        }
 
         // Render head
         ctx.fillStyle = colorPalettes[colorPalette].head
