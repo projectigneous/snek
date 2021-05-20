@@ -1,112 +1,51 @@
 var s = document.createElement("script")
 s.src = "./pathfinding-browser.min.js"
+
+function canDieAlongQueue() {
+    var pos = [...gameState.position ]
+    for (var input of bQueue) {
+        pos[0] += input[0]
+        pos[1] += input[1]
+        if (willDieAtPos(pos)) return true
+    }
+    return false
+}
 s.onload = function() {
     window.steps = []
-    window.finder = new PF.JumpPointFinder();
+    window.finder = new PF.AStarFinder({allowDiagonal: false});
     window.doBotLogic = function() {
         if (!this.gameState.running) { steps = []; return}
+        if (bQueue.length > 1 && !canDieAlongQueue()) return
+        var pos = this.gameState.position
+        var grid = new PF.Grid(boardWidth, boardHeight);
         if (steps.length <= 1000) {
-            var grid = new PF.Grid(boardWidth, boardHeight);
             for (var trail of gameState.trail) {
                 try {
                     grid.setWalkableAt(...trail, false);
-                } catch(e){}
+                } catch(e){console.error(e)}
             } 
             try {
                 var lpos = [
                     this.gameState.position[0] - this.gameState.direction[0],
                     this.gameState.position[1] - this.gameState.direction[1]]
                 this.botIndicators = []
+                console.log(pos,lpos)
                 this.putIndicator(lpos,1,1)
                 this.putIndicator(pos,0.5,1)
-                grid.setWalkableAt(...lpos,
-                false)
-            } catch(e) {}
+                grid.setWalkableAt(...lpos,false)
+            } catch(e) {console.error(e)}
             steps = finder.findPath(...gameState.position, ...gameState.applePosition, grid);
             
-    
+            
         }
-        var npos = steps[0]
-        var pos = this.gameState.position
-        /*doOldBotLogic(...npos)*/
-        if (npos[0] == pos[0] && npos[1] == pos[1]) {
-            steps.shift()
-            if (!steps[0]) {
-                return doBotLogic()
-            }
-            npos = steps[0]
+        var dirs = []
+        var ls = pos
+        for (var s of steps) {
+            dirs.push([ s[0] - ls[0], s[1] - ls[1] ])
+            ls = s
         }
-        var hasDirected = false
-        if (pos[0] > npos[0] && !willDieAtPos([pos[0] - 1,pos[1]]) && this.gameState.direction != [1,0]) {
-            hasDirected = true
-            window.onkeydown({key: "a"})
-            if (pos[0] <= 0) {
-                if (pos[1] > boardHeight / 2) {
-                    window.onkeydown({key: "w"})
-                } else {
-                    window.onkeydown({key: "s"})
-                }
-            }
-        }
-        if (pos[0] < npos[0] && !willDieAtPos([pos[0] + 1,pos[1]]) && this.gameState.direction != [1,0]) {
-            hasDirected = true
-            window.onkeydown({key: "d"})
-            if (pos[0] >= boardWidth - 1) {
-                if (pos[1] > boardHeight / 2) {
-                    window.onkeydown({key: "w"})
-                } else {
-                    window.onkeydown({key: "s"})
-                }
-            }
-        }
-        if (pos[1] < npos[1] && !willDieAtPos([pos[0],pos[1] - 1]) && this.gameState.direction != [0,1]) {
-            hasDirected = true
-            window.onkeydown({key: "s"})
-            if (pos[1] >= boardHeight - 1) {
-                if (pos[0] > boardWidth / 2) {
-                    window.onkeydown({key: "a"})
-                } else {
-                    window.onkeydown({key: "d"})
-                }
-            }
-        }
-        if (pos[1] > npos[1] && !willDieAtPos([pos[0],pos[1] - 1]) && this.gameState.direction != [0,-1]) {
-            hasDirected = true
-            window.onkeydown({key: "w"})
-            if (pos[1] <= 0) {
-                if (pos[0] > boardWidth / 2) {
-                    window.onkeydown({key: "a"})
-                } else {
-                    window.onkeydown({key: "d"})
-                }
-            }
-        }
-        if (!hasDirected) {
-            this.console.log("what")
-            if (this.gameState.direction[1] == -1) {
-                this.lastDirect = "w"
-            }
-            if (this.gameState.direction[1] == 1) {
-                this.lastDirect = "s"
-            }
-
-            if (this.gameState.direction[0] == -1) {
-                this.lastDirect = "a"
-            }
-
-            if (this.gameState.direction[0] == 1) {
-                this.lastDirect = "d"
-            }
-            this.doOldBotLogic(...npos)
-        }
-        /*this.setTimeout(function() {
-            if (pos != npos) {
-                window.steps = []
-                doBotLogic()
-                doBotLogic()
-            }
-        },60)*/
-        
+        dirs.shift()
+        bQueue = dirs
         
     }
 }

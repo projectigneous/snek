@@ -28,7 +28,7 @@ function renderCheatsMenu() {
 function checkCheats(key) {
     if ((keylog.endsWith("c")) && !cheatsVisible) {
         cancelAnimationFrame(animFrame)
-        clearInterval(mvmt)
+        clearTimeout(mvmt)
         cheatsVisible = true
     } else if (cheatsVisible) {
         console.log()
@@ -58,7 +58,7 @@ function checkCheats(key) {
             } else {
                 cheatsVisible = false
                 render()
-                mvmt = setInterval(movement,100)
+                mvmt = setTimeout(movement,100)
 
             }
         }

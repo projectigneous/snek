@@ -102,12 +102,16 @@ function loseState() {
     setTimeout(function() {
         alert("You lost! Score: " + gameState.length + ". Press 'r' to reset.")
         gameState.canReset = true
-    },1000 + (x * 10))
+    },bot ? 0 : 1000 + (x * 10))
 }
 
 function movement() {
+    mvmt = setTimeout(movement, bot ? 100 : 100 )
     if (window.smovement) { window.smovement() }
     if (!gameState.running) {return}
+    
+    // accept input
+    if (bQueue.length > 0) gameState.direction = bQueue.shift()
 
     // add trail
     gameState.trail.unshift([gameState.position[0],gameState.position[1],gameState.movementIndex])
@@ -185,12 +189,12 @@ function render() {
             }
         }
         ctx.globalAlpha = 1
-        if (bot) {
-        for (var indicator of botIndicators) {
-            ctx.fillStyle = indicator[4]
-            ctx.fillRect(indicator[0],indicator[1],bWidth,bHeight)
+        if (bot && typeof botIndicators != "undefined") {
+            for (var indicator of botIndicators) {
+                ctx.fillStyle = indicator[4]
+                ctx.fillRect(indicator[0],indicator[1],bWidth,bHeight)
 
-        }
+            }
         }
 
         // Render head
@@ -207,30 +211,27 @@ function render() {
     animFrame = requestAnimationFrame(render)
 }
 var animFrame = requestAnimationFrame(render)
-var mvmt = setInterval(movement,100)
+mvmt = setTimeout(movement)
 
 var keylog = ""
+var bQueue = []
 
 window.onkeydown = function(evt) {
     var key = evt.key
     keylog += key
     if (window.checkCheats) { window.checkCheats(key) }
-    
+    if (key == "s") movement()
     if ((key == "ArrowUp" || key == "w") && gameState.direction[1] != 1 && gameState.canDirect) {
-        gameState.canDirect = false
-        gameState.direction = [0,-1]
+        bQueue.push([0,-1])
     }
     if ((key == "ArrowDown" || key == "s") && gameState.direction[1] != -1&& gameState.canDirect) {
-        gameState.canDirect = false
-        gameState.direction = [0,1]
+        bQueue.push([0,1])
     }
     if ((key == "ArrowLeft" || key == "a") && gameState.direction[0] != 1&& gameState.canDirect) {
-        gameState.canDirect = false
-        gameState.direction = [-1,0]
+        bQueue.push([-1,0])
     }
     if ((key == "ArrowRight" || key == "d") && gameState.direction[0] != -1&& gameState.canDirect) {
-        gameState.canDirect = false
-        gameState.direction = [1,0]
+        bQueue.push([1,0])
     }
     if (key == "r" && gameState.canReset) {
         resetGame()
